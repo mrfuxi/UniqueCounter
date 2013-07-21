@@ -1,22 +1,23 @@
-UniqueCounter
-============
+## UniqueCounter
 
 UniqueCounter is a Solr search component that counts unique values in search results in specified fields
 
-Parameters (assuming component name is "unique")
-- unique	true/*false*	Enabling component 
-- unique.field	[field_name]	Name of field you want to examine (details: http://wiki.apache.org/solr/SimpleFacetParameters#facet.field)
-- unique.method enum/fc/fcs	Terms enumeration method (details: http://wiki.apache.org/solr/SimpleFacetParameters#facet.method)
-- unique.missing true/*false*	Include missing values (details http://wiki.apache.org/solr/SimpleFacetParameters#facet.missing)
+### Parameters (assuming component name is "unique")
+|Name          |Vale            |Note                |
+|--------------|----------------|--------------------|
+|unique        |true / **false**| Enabling component |
+|unique.field  |[field_name]    | Name of field you want to examine ([details](http://wiki.apache.org/solr/SimpleFacetParameters#facet.field, "SimpleFacetParameters - facet.field")) |
+|unique.method |enum/fc/fcs     | Terms enumeration method ([details](http://wiki.apache.org/solr/SimpleFacetParameters#facet.method, "SimpleFacetParameters - facet.method")) |
+|unique.missing|true / **false**| Include missing values ([details](http://wiki.apache.org/solr/SimpleFacetParameters#facet.missing, "SimpleFacetParameters - facet.missing")) |
 
-How to set up:
+### How to set up:
 - Add jar to be loaded
 - Define component <searchComponent name="unique" class="com.fuxi.UniqueCounter" />
 - Add component to a handler <arr name="last-components"><str>unique</str></arr>
 
 Example of usage:
 
-
+```
 <?xml version="1.0" encoding="UTF-8"?>
 <response>
 
@@ -59,4 +60,4 @@ Example of usage:
   <int name="cat">15</int>
 </lst>
 </response>
-
+```
