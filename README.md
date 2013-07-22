@@ -15,8 +15,19 @@ UniqueCounter is a Solr search component that counts unique values in search res
 
 ### How to set up:
 - Add jar to be loaded
-- Define component <searchComponent name="unique" class="com.fuxi.UniqueCounter" />
-- Add component to a handler <arr name="last-components"><str>unique</str></arr>
+- Define component
+
+```
+<searchComponent name="unique" class="com.fuxi.UniqueCounter" />
+```
+
+- Add component to a handler
+
+```
+<arr name="last-components">
+  <str>unique</str>
+</arr>
+```
 
 #### Example of usage:
 
