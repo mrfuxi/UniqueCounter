@@ -60,9 +60,6 @@ public class UniqueCounter extends SearchComponent {
 		String method = params.get(getName() + ".method");
 		
 		ModifiableSolrParams facet_params = new ModifiableSolrParams();
-		for (String field : field_names) {
-			facet_params.add(FacetParams.FACET_FIELD, field);
-		}
 
 		if (missing != null) {
 			facet_params.set(FacetParams.FACET_MISSING, missing);
@@ -76,34 +73,26 @@ public class UniqueCounter extends SearchComponent {
 		facet_params.set(FacetParams.FACET_MINCOUNT, 1);
 		facet_params.set(FacetParams.FACET_OFFSET, 0);
 		
-        SimpleFacets f = new SimpleFacets(rb.req,
-        								  rb.getResults().docSet,
-        								  facet_params,
-							              rb );
-		
 		NamedList<Integer> unique_counts = new SimpleOrderedMap<Integer>();
-        
-        try {
-			NamedList<Object> f_counts = f.getFacetFieldCounts();
-			
-			Iterator<Entry<String, Object>> iterator = f_counts.iterator();
-			
-			while(iterator.hasNext()) {
-				Entry<String, Object> field_data = iterator.next();
-				String field_name = field_data.getKey();
-				@SuppressWarnings("unchecked")
-				NamedList<Object> field_facets = (NamedList<Object>) field_data.getValue();
 
-				/*
-				TODO: Handle missing with 0 results - do not count that
-                */
-
-				unique_counts.add(field_name, field_facets.size());
+		String pkName = rb.req.getSchema().getUniqueKeyField().getName();
+		
+		for (String field : field_names) {
+			Integer count = -1;
+			
+			if (pkName.equals(field)) {
+				count = rb.getResults().docSet.size();
+			} else {			
+				facet_params.set(FacetParams.FACET_FIELD, field);
+				SimpleFacets f = new SimpleFacets(rb.req,
+												  rb.getResults().docSet,
+												  facet_params,
+												  rb);
+				
+				count = f.getTermCounts(field).size();
+				f = null;
 			}
-		} catch (SyntaxError e) {
-			numErrors++;
-			e.printStackTrace();
-			return;
+			unique_counts.add(field, count);
 		}
         
         rb.rsp.add(getName(), unique_counts);
